@@ -4,27 +4,28 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.View
-import com.difrancescogianmarco.arcore_flutter_plugin.flutter_models.FlutterArCoreNode
 import com.difrancescogianmarco.arcore_flutter_plugin.utils.ArCoreUtils
-import com.google.ar.core.ArCoreApk
-import com.google.ar.core.Pose
-import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.Node
-import io.flutter.app.FlutterApplication
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 
-open class BaseArCoreView(val activity: Activity, context: Context, messenger: BinaryMessenger, id: Int, protected val debug: Boolean) : PlatformView, MethodChannel.MethodCallHandler {
+open class BaseArCoreView(
+    val activity: Activity,
+    context: Context,
+    messenger: BinaryMessenger,
+    id: Int,
+    protected val debug: Boolean
+) : PlatformView, MethodChannel.MethodCallHandler {
 
     lateinit var activityLifecycleCallbacks: Application.ActivityLifecycleCallbacks
-    protected val methodChannel: MethodChannel = MethodChannel(messenger, "arcore_flutter_plugin_$id")
+    protected val methodChannel: MethodChannel =
+        MethodChannel(messenger, "arcore_flutter_plugin_$id")
     protected var arSceneView: ArSceneView? = null
+
     //    protected val activity: Activity = (context.applicationContext as FlutterApplication).currentActivity
     protected val RC_PERMISSIONS = 0x123
     protected var installRequested: Boolean = false
@@ -37,7 +38,7 @@ open class BaseArCoreView(val activity: Activity, context: Context, messenger: B
             isSupportedDevice = true
             arSceneView = ArSceneView(context)
             ArCoreUtils.requestCameraPermission(activity, RC_PERMISSIONS)
-            setupLifeCycle(context)
+            setupLifeCycle()
         }
     }
 
@@ -47,7 +48,7 @@ open class BaseArCoreView(val activity: Activity, context: Context, messenger: B
         }
     }
 
-    private fun setupLifeCycle(context: Context) {
+    private fun setupLifeCycle() {
         activityLifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 debugLog("onActivityCreated")
@@ -81,7 +82,7 @@ open class BaseArCoreView(val activity: Activity, context: Context, messenger: B
         }
 
         activity.application
-                .registerActivityLifecycleCallbacks(this.activityLifecycleCallbacks)
+            .registerActivityLifecycleCallbacks(this.activityLifecycleCallbacks)
     }
 
     override fun getView(): View {
@@ -137,57 +138,11 @@ open class BaseArCoreView(val activity: Activity, context: Context, messenger: B
 //            return
 //        }
     }
-    
-    
-    fun attachNodeToParent(node: Node?, parentNodeName: String?) {
-        if (parentNodeName != null) {
-            debugLog(parentNodeName)
-            val parentNode: Node? = arSceneView?.scene?.findByName(parentNodeName)
-            parentNode?.addChild(node)
-        } else {
-            debugLog("addNodeToSceneWithGeometry: NOT PARENT_NODE_NAME")
-            arSceneView?.scene?.addChild(node)
-        }
-    }
 
-    fun onAddNode(flutterArCoreNode: FlutterArCoreNode, result: MethodChannel.Result?) {
-        debugLog(flutterArCoreNode.toString())
-        NodeFactory.makeNode(activity.applicationContext, flutterArCoreNode, debug) { node, throwable ->
-            debugLog("inserted ${node?.name}")
-
-/*            if (flutterArCoreNode.parentNodeName != null) {
-                debugLog(flutterArCoreNode.parentNodeName);
-                val parentNode: Node? = arSceneView?.scene?.findByName(flutterArCoreNode.parentNodeName)
-                parentNode?.addChild(node)
-            } else {
-                debugLog("addNodeToSceneWithGeometry: NOT PARENT_NODE_NAME")
-                arSceneView?.scene?.addChild(node)
-            }*/
-            if (node != null) {
-                attachNodeToParent(node, flutterArCoreNode.parentNodeName)
-                for (n in flutterArCoreNode.children) {
-                    n.parentNodeName = flutterArCoreNode.name
-                    onAddNode(n, null)
-                }
-                result?.success(null)
-            } else if (throwable != null) {
-                result?.error("onAddNode", throwable.localizedMessage, null)
-            }
-        }
-    }
-
-    fun removeNode(name: String, result: MethodChannel.Result?) {
-        val node = arSceneView?.scene?.findByName(name)
-        if (node != null) {
-            arSceneView?.scene?.removeChild(node)
-            debugLog("removed ${node.name}")
-        }
-        result?.success(null)
-    }
 
     fun removeNode(node: Node) {
-            arSceneView?.scene?.removeChild(node)
-            debugLog("removed ${node.name}")
+        arSceneView?.scene?.removeChild(node)
+        debugLog("removed ${node.name}")
     }
 
     fun onPause() {
