@@ -120,13 +120,16 @@ class ArCoreController {
             ArCoreAugmentedImage.fromMap(call.arguments);
         onTrackingImage!(arCoreAugmentedImage);
         break;
+
+      case 'takeScreenshot':
+        takeScreenshot()
+        break;
       case 'togglePlaneRenderer':
         if (debug ?? true) {
           print('Toggling Plane Renderer Visibility');
         }
         togglePlaneRenderer();
         break;
-
       default:
         if (debug ?? true) {
           print('Unknown method ${call.method}');
@@ -146,6 +149,10 @@ class ArCoreController {
 
   Future<dynamic> togglePlaneRenderer() async {
     return _channel.invokeMethod('togglePlaneRenderer');
+  }
+
+   Future<dynamic> takeScreenshot() async {
+    return _channel.invokeMethod('takeScreenshot');
   }
 
   Future<dynamic> getTrackingState() async {
