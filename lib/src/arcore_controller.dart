@@ -122,8 +122,9 @@ class ArCoreController {
         break;
 
       case 'takeScreenshot':
-        takeScreenshot()
+        takeScreenshot();
         break;
+
       case 'togglePlaneRenderer':
         if (debug ?? true) {
           print('Toggling Plane Renderer Visibility');
