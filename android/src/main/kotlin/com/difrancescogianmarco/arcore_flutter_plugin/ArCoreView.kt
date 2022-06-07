@@ -35,6 +35,7 @@ import android.os.Environment
 import android.view.PixelCopy
 import android.os.HandlerThread
 import android.content.ContextWrapper
+import com.difrancescogianmarco.arcore_flutter_plugin.utils.DecodableUtils.Companion.parseVector3
 import java.io.FileOutputStream
 import java.io.File
 import java.io.IOException
@@ -625,10 +626,11 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
 
     }*/
 
-        fun updatePosition(call: MethodCall, result: MethodChannel.Result) {
+    fun updatePosition(call: MethodCall, result: MethodChannel.Result) {
         val name = call.argument<String>("name")
         val node = arSceneView?.scene?.findByName(name)
         node?.localPosition = parseVector3(call.arguments as HashMap<String, Any>)
         result.success(null)
+    }
     
 }
