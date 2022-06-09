@@ -460,7 +460,6 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
         NodeFactory.makeNode(activity.applicationContext, flutterArCoreNode, debug) { node, throwable ->
 
             debugLog("onAddNode inserted ${node?.name}")
-
 /*            if (flutterArCoreNode.parentNodeName != null) {
                 debugLog(flutterArCoreNode.parentNodeName);
                 val parentNode: Node? = arSceneView?.scene?.findByName(flutterArCoreNode.parentNodeName)
@@ -489,6 +488,7 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
         } else {
             debugLog("addNodeToSceneWithGeometry: NOT PARENT_NODE_NAME")
             arSceneView?.scene?.addChild(node)
+
         }
     }
 
@@ -566,6 +566,9 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
                     }
                     config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
                     config.focusMode = Config.FocusMode.AUTO;
+                    config.planeFindingMode = Config.PlaneFindingMode.HORIZONTAL
+                    config.lightEstimationMode = Config.LightEstimationMode.DISABLED;
+
                     session.configure(config)
                     arSceneView?.setupSession(session)
                 }
