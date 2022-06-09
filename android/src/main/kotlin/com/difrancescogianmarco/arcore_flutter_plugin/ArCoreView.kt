@@ -233,6 +233,9 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
                 debugLog(" Toggle planeRenderer visibility" )
                 arSceneView!!.planeRenderer.isVisible = !arSceneView!!.planeRenderer.isVisible
             }
+            "togglePlaneRendererEnable" -> {
+                arSceneView!!.planeRenderer.isEnabled = !arSceneView!!.planeRenderer.isEnabled
+            }
             else -> {
             }
         }
