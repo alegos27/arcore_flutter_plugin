@@ -122,7 +122,7 @@ class ArCoreController {
         break;
 
       case 'takeScreenshot':
-        takeScreenshot();
+        takeScreenshot(call.arguments);
         break;
 
       case 'togglePlaneRenderer':
@@ -161,8 +161,8 @@ class ArCoreController {
     return _channel.invokeMethod('togglePlaneRendererEnable');
   }
 
-   Future<dynamic> takeScreenshot() async {
-    return _channel.invokeMethod('takeScreenshot');
+   Future<dynamic> takeScreenshot(Function(String , Uint8List) onTake) async {
+    return _channel.invokeMethod('takeScreenshot' {'onTake' : onTake});
   }
 
   Future<dynamic> getTrackingState() async {

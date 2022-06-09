@@ -36,6 +36,7 @@ import android.view.PixelCopy
 import android.os.HandlerThread
 import android.content.ContextWrapper
 import com.difrancescogianmarco.arcore_flutter_plugin.utils.DecodableUtils.Companion.parseVector3
+import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 import java.io.File
 import java.io.IOException
@@ -332,7 +333,7 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
         }
     }
 
-    private fun takeScreenshot(call: MethodCall, result: MethodChannel.Result , onTake : (Bitmap , String) -> Void) {
+    private fun takeScreenshot(call: MethodCall, result: MethodChannel.Result , onTake : (Bitmap , ByteArray) -> Void) {
         try {
             // create bitmap screen capture
 
@@ -349,7 +350,11 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
                 if (copyResult === PixelCopy.SUCCESS) {
                     try {
                         var path = saveBitmapToDisk(bitmap)
-                        onTake(bitmap,path);
+                        var stream = ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        var byteArray = stream.toByteArray();
+                        bitmap.recycle();
+                        onTake(byteArray,path);
                     } catch (e: IOException) {
                         e.printStackTrace();
                     }
