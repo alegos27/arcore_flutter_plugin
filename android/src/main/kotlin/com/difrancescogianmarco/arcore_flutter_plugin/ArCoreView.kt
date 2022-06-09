@@ -332,7 +332,7 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
         }
     }
 
-    private fun takeScreenshot(call: MethodCall, result: MethodChannel.Result) {
+    private fun takeScreenshot(call: MethodCall, result: MethodChannel.Result , onTake : (Bitmap , String) -> Void) {
         try {
             // create bitmap screen capture
 
@@ -348,7 +348,8 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
             PixelCopy.request(arSceneView!!, bitmap, { copyResult ->
                 if (copyResult === PixelCopy.SUCCESS) {
                     try {
-                        saveBitmapToDisk(bitmap)
+                        var path = saveBitmapToDisk(bitmap)
+                        onTake(bitmap,path);
                     } catch (e: IOException) {
                         e.printStackTrace();
                     }
