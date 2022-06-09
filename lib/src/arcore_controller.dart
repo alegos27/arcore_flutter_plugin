@@ -131,6 +131,12 @@ class ArCoreController {
         }
         togglePlaneRenderer();
         break;
+      case 'togglePlaneRendererEnable':
+        if (debug ?? true) {
+            print('Toggling Plane Renderer Enable');
+        }
+        togglePlaneRendererEnable();
+        break;
       default:
         if (debug ?? true) {
           print('Unknown method ${call.method}');
@@ -150,6 +156,9 @@ class ArCoreController {
 
   Future<dynamic> togglePlaneRenderer() async {
     return _channel.invokeMethod('togglePlaneRenderer');
+  }
+  Future<dynamic> togglePlaneRendererEnable() async {
+    return _channel.invokeMethod('togglePlaneRendererEnable');
   }
 
    Future<dynamic> takeScreenshot() async {
