@@ -243,7 +243,7 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
                     arSceneView!!.session!!.config.planeFindingMode =   Config.PlaneFindingMode.HORIZONTAL
                 }
 
-
+                debugLog(" Toggle planeRenderer Enable visibility" )
                 
             }
             else -> {
