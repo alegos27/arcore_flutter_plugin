@@ -234,7 +234,17 @@ class ArCoreView(val activity: Activity, context: Context, messenger: BinaryMess
                 arSceneView!!.planeRenderer.isVisible = !arSceneView!!.planeRenderer.isVisible
             }
             "togglePlaneRendererEnable" -> {
-                arSceneView!!.planeRenderer.isEnabled = !arSceneView!!.planeRenderer.isEnabled
+                if(arSceneView!!.planeRenderer.isEnabled) {
+                    arSceneView!!.planeRenderer.isEnabled = false
+                    arSceneView!!.session!!.config.planeFindingMode =   Config.PlaneFindingMode.DISABLED
+                }
+                else {
+                    arSceneView!!.planeRenderer.isEnabled = true
+                    arSceneView!!.session!!.config.planeFindingMode =   Config.PlaneFindingMode.HORIZONTAL
+                }
+
+
+                
             }
             else -> {
             }
