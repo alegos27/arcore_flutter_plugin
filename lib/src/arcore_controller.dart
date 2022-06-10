@@ -122,7 +122,7 @@ class ArCoreController {
         break;
 
       case 'takeScreenshot':
-        takeScreenshot(call.arguments);
+        takeScreenshot();
         break;
 
       case 'togglePlaneRenderer':
@@ -133,7 +133,7 @@ class ArCoreController {
         break;
       case 'togglePlaneRendererEnable':
         if (debug ?? true) {
-            print('Toggling Plane Renderer Enable');
+          print('Toggling Plane Renderer Enable');
         }
         togglePlaneRendererEnable();
         break;
@@ -157,12 +157,18 @@ class ArCoreController {
   Future<dynamic> togglePlaneRenderer() async {
     return _channel.invokeMethod('togglePlaneRenderer');
   }
+
   Future<dynamic> togglePlaneRendererEnable() async {
     return _channel.invokeMethod('togglePlaneRendererEnable');
   }
 
-   Future<dynamic> takeScreenshot(Function(String , Uint8List) onTake) async {
-    return _channel.invokeMethod('takeScreenshot', {'onTake' : onTake});
+  Future<Uint8List?> takeScreenshot() async {
+    try {
+      return await _channel.invokeMethod('takeScreenshot');
+    } on PlatformException catch (e) {
+      print('Failed to get screenshot: $e');
+      return null;
+    }
   }
 
   Future<dynamic> getTrackingState() async {
