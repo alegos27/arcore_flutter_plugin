@@ -1,5 +1,6 @@
 import 'package:arcore_flutter_plugin_example/screens/augmented_faces.dart';
 import 'package:arcore_flutter_plugin_example/screens/augmented_images.dart';
+import 'package:arcore_flutter_plugin_example/screens/camera_position.dart';
 import 'package:arcore_flutter_plugin_example/screens/image_object.dart';
 import 'package:arcore_flutter_plugin_example/screens/matri_3d.dart';
 import 'package:arcore_flutter_plugin_example/screens/multiple_augmented_images.dart';
@@ -76,6 +77,13 @@ class HomeScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => AutoDetectPlane()));
             },
             title: Text("Plane detect handler"),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CameraPosition()));
+            },
+            title: Text("Camera position"),
           ),
           ListTile(
             onTap: () {

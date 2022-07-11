@@ -5,6 +5,7 @@ import 'package:arcore_flutter_plugin/src/arcore_rotating_node.dart';
 import 'package:arcore_flutter_plugin/src/utils/vector_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import 'arcore_hit_test_result.dart';
 import 'arcore_node.dart';
@@ -167,6 +168,20 @@ class ArCoreController {
       return await _channel.invokeMethod('takeScreenshot');
     } on PlatformException catch (e) {
       print('Failed to get screenshot: $e');
+      return null;
+    }
+  }
+
+  Future<Vector3?> cameraPosition() async {
+    try {
+      final result = await _channel.invokeMethod('cameraPosition');
+      if(result != null) {
+        return vector3fromArray(result);
+      } else {
+        return null;
+      }
+    } on PlatformException catch (e) {
+      print('Failed to get camera position: $e');
       return null;
     }
   }

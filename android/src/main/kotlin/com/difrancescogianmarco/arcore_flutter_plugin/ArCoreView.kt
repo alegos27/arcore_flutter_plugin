@@ -213,6 +213,10 @@ class ArCoreView(
                 debugLog(" takeScreenshot")
                 takeScreenshot(call, result)
             }
+            "cameraPosition" -> {
+                debugLog(" cameraPosition")
+                cameraPosition(call, result)
+            }
             "loadMesh" -> {
                 val map = call.arguments as HashMap<String, Any>
                 val textureBytes = map["textureBytes"] as ByteArray
@@ -374,6 +378,22 @@ class ArCoreView(
             // Several error may come out with file handling or DOM
             e.printStackTrace()
             result.error("SCREENSHOT ERROR", null, null)
+        }
+    }
+
+    private fun cameraPosition(
+        call: MethodCall,
+        result: MethodChannel.Result,
+    ) {
+        try {
+            val cameraPosition = arSceneView?.arFrame?.camera?.pose
+            if(cameraPosition != null) {
+                result.success(cameraPosition.translation)
+            }
+        } catch (e: Throwable) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace()
+            result.error("CAMERA POSITION ERROR", null, null)
         }
     }
 
