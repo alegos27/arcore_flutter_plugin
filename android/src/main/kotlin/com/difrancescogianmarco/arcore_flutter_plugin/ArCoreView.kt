@@ -317,11 +317,11 @@ class ArCoreView(
         activity.application.registerActivityLifecycleCallbacks(this.activityLifecycleCallbacks)
     }
 
-    private fun onSingleTap(tap: MotionEvent?) {
+    private fun onSingleTap(tap: MotionEvent) {
         debugLog(" onSingleTap")
         val frame = arSceneView?.arFrame
         if (frame != null) {
-            if (tap != null && frame.camera.trackingState == TrackingState.TRACKING) {
+            if (frame.camera.trackingState == TrackingState.TRACKING) {
                 val hitList = frame.hitTest(tap)
                 val list = ArrayList<HashMap<String, Any>>()
                 for (hit in hitList) {
@@ -412,7 +412,7 @@ class ArCoreView(
                         methodChannel.invokeMethod("onNodeTap", hitTestResult.node?.name)
                         return@setOnTouchListener true
                     }
-                    return@setOnTouchListener gestureDetector.onTouchEvent(event)
+                    return@setOnTouchListener (event?.let { gestureDetector.onTouchEvent(it) } ?: false)
                 }
         }
         val enableUpdateListener: Boolean? = call.argument("enableUpdateListener")
